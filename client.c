@@ -263,8 +263,8 @@ int main(int argc, char *argv[]) {
     memcpy(out_hdr->h_source, src_addr, ETH_ALEN);
 
     /* fill ethernet payload with some data */
-    for (i = 0; i < PACKET_SIZE - ETH_HLEN; i++)
-        data_ptr[i] = (unsigned char)(0);
+    for (i = 0; i < sizeof(packet_impl); i++)
+        data_ptr[i] = (unsigned char)packet_impl[i];
 
     pthread_create(&thread, NULL, read_packets, src_addr);
     printf("sending packets\n");
@@ -298,13 +298,13 @@ int main(int argc, char *argv[]) {
     print_result(&client_result);
 
     /* send final packets */
-    memcpy(data_ptr, END_OF_STREAM, sizeof(END_OF_STREAM));
-    for (i = 0; i < 10; i++)
-        sendto(sock_fd, out_buff, ETH_HLEN + sizeof(END_OF_STREAM), 0,
-                (struct sockaddr *)&s_addr, sizeof(s_addr));
+    // memcpy(data_ptr, END_OF_STREAM, sizeof(END_OF_STREAM));
+    // for (i = 0; i < 10; i++)
+    //     sendto(sock_fd, out_buff, ETH_HLEN + sizeof(END_OF_STREAM), 0,
+    //             (struct sockaddr *)&s_addr, sizeof(s_addr));
 
     /* wait 5 seconds for server result */
-    sleep(5);
+    // sleep(5);
     waiting = 0;
     close_socket(sock_fd);
 
